@@ -2,41 +2,49 @@
   "$schema": "https://raw.githubusercontent.com/qwqnt-community/types/main/plugin.schema.json",
   "name": "qwqnt-change-summary",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "packageManager": "pnpm@12.3.4+sha512.961aa41fb077da3a04a441d9f8e15ebc0c96da8ef710b2eb67bf9ee7cb0610eabd48f1fd85f51cffe73846785fa0f87c56a3a872a1d893f8446741b5cce45457",
   "description": "修改图片概要",
   "author": "LgCuwukii",
-  "license": "MIT",
+  "contributors": [
+    "WJZ_P"
+  ],
+  "license": "EPL-2.0",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -b --noEmit",
-    "format": "prettier -cw",
+    "format": "prettier -cw .",
     "test": "vitest",
     "test:run": "vitest run",
-    "build": "vite build --mode main && vite build --mode preload && vite build --mode renderer"
+    "build": "node scripts/build.mjs",
+    "build:pack": "node scripts/build.mjs --pack"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
     "@electron-toolkit/tsconfig": "^2.0.0",
+    "@qwqnt-community/hako-types": "github:qwqnt-community/plugin-types#hako",
     "@qwqnt/types": "github:qwqnt-community/types",
     "@types/node": "^26.5.1",
     "electron": "^44.3.0",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.6",
+    "qwqnt-ipc-interceptor": "github:qwqnt-community/qwqnt-ipc-interceptor#v1.2.1",
     "typescript": "^6.0.3",
     "unplugin-zip-pack": "^1.1.0",
     "vite": "^8.3.0",
-    "vite-plugin-cp": "^8.0.1",
     "vitest": "^5.0.0"
   },
   "qwqnt": {
     "name": "修改图片概要",
     "inject": {
-      "main": "./main/index.js",
-      "preload": "./preload/index.cjs",
-      "renderer": "./renderer/index.js"
+      "main": "./dist/main/index.js",
+      "renderer": "./dist/renderer/index.js"
+    },
+    "dependencies": {
+      "qwqnt-hako": "^1.0.2",
+      "qwqnt-ipc-interceptor": "^1.2.1"
     }
   }
 }

@@ -5,5 +5,5 @@
     "moduleResolution": "bundler",
     "types": ["@qwqnt/types/main"]
   },
-  "include": ["vite.config.*", "vitest.config.*", "src/main/**/*", "src/global.d.ts"]
+  "include": ["vite.config.*", "vitest.config.*", "src/main/**/*", "src/shared/**/*"]
 }

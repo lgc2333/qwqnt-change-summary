@@ -1,0 +1,34 @@
+<setting-section data-title="外显文本">
+  <setting-panel>
+    <setting-list data-direction="column">
+      <setting-item>
+        <div>
+          <setting-text>图片外显文本</setting-text>
+          <setting-text data-type="secondary"
+            >会话列表与合并转发中替代「[图片]」的文本，留空保持原生</setting-text
+          >
+        </div>
+        <input
+          type="text"
+          name="picOutsideText"
+          spellcheck="false"
+          placeholder="[图片]"
+        />
+      </setting-item>
+      <setting-item>
+        <div>
+          <setting-text>表情包外显文本</setting-text>
+          <setting-text data-type="secondary"
+            >替代动画表情的「[动画表情]」与商城表情自身名称，留空保持原生</setting-text
+          >
+        </div>
+        <input
+          type="text"
+          name="memeOutsideText"
+          spellcheck="false"
+          placeholder="[动画表情]"
+        />
+      </setting-item>
+    </setting-list>
+  </setting-panel>
+</setting-section>

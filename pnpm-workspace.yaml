@@ -1,6 +1,9 @@
 allowBuilds:
   electron: false
   esbuild: false
+  # 从 GitHub 装 qwqnt-ipc-interceptor 只为取声明源；key 由 pnpm 依 tag 解析出的 commit 生成，
+  # 升级该 tag 后需同步替换此 key
+  'qwqnt-ipc-interceptor@https://codeload.github.com/qwqnt-community/qwqnt-ipc-interceptor/tar.gz/ddb92d688d354d9125e71ef93d0ccbd00eb1f494': true
 minimumReleaseAgeExclude:
   - '@types/node@26.5.1'
   - vite@8.3.0

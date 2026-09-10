@@ -1,22 +1,22 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'node:path'
+import { cpSync, copyFileSync, mkdirSync, rmSync } from 'node:fs'
 import { builtinModules } from 'node:module'
-import viteCp from 'vite-plugin-cp'
+import { resolve } from 'node:path'
+import process from 'node:process'
+import { defineConfig } from 'vite'
 import viteZipPack from 'unplugin-zip-pack/vite'
 import Plugin from './package.json'
 
 const SRC_DIR = resolve(__dirname, './src')
 const OUTPUT_DIR = resolve(__dirname, './dist')
+const PACK_DIR = resolve(__dirname, './temp/pack')
 
 const external = ['electron', ...builtinModules.flatMap((m) => [m, `node:${m}`])]
 
+// 由 scripts/build.mjs 按 `--pack` 设置：打包时把 package.json 与 dist/ 暂存成发布目录结构再压缩。
+const shouldPack = process.env.QWQNT_PACK === '1'
+
 const BaseConfig = defineConfig({
   root: __dirname,
-  resolve: {
-    // alias: {
-    //   '@': SRC_DIR,
-    // },
-  },
 })
 
 const configs = {
@@ -39,33 +39,26 @@ const configs = {
     },
   }),
 
-  preload: defineConfig({
-    ...BaseConfig,
-    plugins: [],
-    build: {
-      minify: true,
-      outDir: resolve(OUTPUT_DIR, './preload'),
-      lib: {
-        entry: resolve(SRC_DIR, './preload/index.ts'),
-        formats: ['cjs'],
-
-        fileName: () => 'index.cjs',
-      },
-      rolldownOptions: {
-        external,
-      },
-    },
-  }),
-
   renderer: defineConfig({
     ...BaseConfig,
     plugins: [
-      viteCp({
-        targets: [{ src: './package.json', dest: 'dist' }],
-      }),
       viteZipPack({
-        in: OUTPUT_DIR,
+        enabled: shouldPack,
+        in: PACK_DIR,
         out: resolve(__dirname, `./${Plugin.name}.zip`),
+        hooks: {
+          pre: () => {
+            if (!shouldPack) return
+
+            rmSync(PACK_DIR, { recursive: true, force: true })
+            mkdirSync(PACK_DIR, { recursive: true })
+            copyFileSync(
+              resolve(__dirname, 'package.json'),
+              resolve(PACK_DIR, 'package.json'),
+            )
+            cpSync(OUTPUT_DIR, resolve(PACK_DIR, 'dist'), { recursive: true })
+          },
+        },
       }),
     ],
     build: {
