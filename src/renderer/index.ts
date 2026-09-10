@@ -14,6 +14,9 @@ RendererEvents.onSettingsWindowCreated(async () => {
 
   view.innerHTML = settingsHtml
 
+  const version = view.querySelector('[data-role="version"]')
+  if (version) version.textContent = __self.meta.packageJson.version
+
   const config = normalizeOutsideTextConfig(
     PluginSettings.renderer.readConfig(configId, DEFAULT_OUTSIDE_TEXT_CONFIG),
   )
