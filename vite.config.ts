@@ -1,40 +1,34 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'node:path';
-import { builtinModules } from 'node:module';
-import viteCp from 'vite-plugin-cp';
-import viteOxlint from 'unplugin-oxlint/vite';
-import viteZipPack from 'unplugin-zip-pack/vite';
-import Plugin from './package.json';
+import { defineConfig } from 'vite'
+import { resolve } from 'node:path'
+import { builtinModules } from 'node:module'
+import viteCp from 'vite-plugin-cp'
+import viteZipPack from 'unplugin-zip-pack/vite'
+import Plugin from './package.json'
 
-const SRC_DIR = resolve(__dirname, './src');
-const OUTPUT_DIR = resolve(__dirname, './dist');
+const SRC_DIR = resolve(__dirname, './src')
+const OUTPUT_DIR = resolve(__dirname, './dist')
 
-const external = ['electron', ...builtinModules.flatMap(m => [m, `node:${m}`])];
+const external = ['electron', ...builtinModules.flatMap((m) => [m, `node:${m}`])]
 
 const BaseConfig = defineConfig({
   root: __dirname,
   resolve: {
-    alias: {
-      '@': SRC_DIR,
-    },
+    // alias: {
+    //   '@': SRC_DIR,
+    // },
   },
-});
+})
 
 const configs = {
   main: defineConfig({
     ...BaseConfig,
-
-    plugins: [
-      viteOxlint({
-        fix: true,
-      }),
-    ],
+    plugins: [],
     build: {
       minify: true,
       outDir: resolve(OUTPUT_DIR, './main'),
       lib: {
         entry: resolve(SRC_DIR, './main/index.ts'),
-        formats: [ 'es' ],
+        formats: ['es'],
 
         fileName: () => 'index.js',
       },
@@ -44,20 +38,16 @@ const configs = {
       target: 'node23',
     },
   }),
+
   preload: defineConfig({
     ...BaseConfig,
-
-    plugins: [
-      viteOxlint({
-        fix: true,
-      }),
-    ],
+    plugins: [],
     build: {
       minify: true,
       outDir: resolve(OUTPUT_DIR, './preload'),
       lib: {
         entry: resolve(SRC_DIR, './preload/index.ts'),
-        formats: [ 'cjs' ],
+        formats: ['cjs'],
 
         fileName: () => 'index.cjs',
       },
@@ -66,13 +56,10 @@ const configs = {
       },
     },
   }),
+
   renderer: defineConfig({
     ...BaseConfig,
-
     plugins: [
-      viteOxlint({
-        fix: true,
-      }),
       viteCp({
         targets: [{ src: './package.json', dest: 'dist' }],
       }),
@@ -86,7 +73,7 @@ const configs = {
       outDir: resolve(OUTPUT_DIR, './renderer'),
       lib: {
         entry: resolve(SRC_DIR, './renderer/index.ts'),
-        formats: [ 'es' ],
+        formats: ['es'],
         fileName: () => 'index.js',
       },
       rolldownOptions: {
@@ -94,6 +81,6 @@ const configs = {
       },
     },
   }),
-};
+}
 
-export default defineConfig(({ mode }) => configs[mode as keyof typeof configs]);
+export default defineConfig(({ mode }) => configs[mode as keyof typeof configs])

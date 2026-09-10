@@ -1,9 +1,9 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/global.d.ts"],
   "compilerOptions": {
     "composite": true,
-    "types": ["@qwqnt/types/main"],
-    "moduleResolution": "bundler"
-  }
+    "moduleResolution": "bundler",
+    "types": ["@qwqnt/types/main"]
+  },
+  "include": ["vite.config.*", "vitest.config.*", "src/main/**/*", "src/global.d.ts"]
 }
